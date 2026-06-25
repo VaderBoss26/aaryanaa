@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Months With You</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Poppins:wght@400;500;600&display=swap');
+
+  :root{
+    --linen:#F7EFE6;
+    --card:#FFFDFB;
+    --rose:#D88C9A;
+    --plum:#4A2C3A;
+    --gold:#C9A66B;
+    --sage:#A8B89F;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--linen);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(216,140,154,0.07), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(168,184,159,0.08), transparent 45%);
+    font-family:'Lora', serif;
+    color:var(--plum);
+    min-height:100vh;
+  }
+
+  /* ---------- screens ---------- */
+  .screen{ display:none; }
+  .screen.active{ display:block; }
+
+  /* ================= BOARD SCREEN ================= */
+
+  .board-header{
+    text-align:center;
+    padding:56px 20px 24px;
+  }
+  .board-header .eyebrow{
+    font-family:'Poppins', sans-serif;
+    font-size:12px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--rose);
+    margin:0 0 10px;
+  }
+  .board-header h1{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:64px;
+    margin:0;
+    line-height:1;
+  }
+  .board-header p.sub{
+    font-style:italic;
+    color:#7a5a68;
+    margin:10px 0 0;
+    font-size:15px;
+  }
+
+  .board-grid{
+    column-count:3;
+    column-gap:26px;
+    max-width:1100px;
+    margin:0 auto;
+    padding:10px 28px 80px;
+  }
+  @media (max-width:900px){ .board-grid{ column-count:2; } }
+  @media (max-width:560px){ .board-grid{ column-count:1; padding:10px 18px 60px; } }
+
+  .pin{
+    background:var(--card);
+    border-radius:3px;
+    box-shadow:0 10px 22px -10px rgba(74,44,58,0.35), 0 2px 6px rgba(74,44,58,0.08);
+    margin:0 0 26px;
+    padding:18px 18px 22px;
+    break-inside:avoid;
+    position:relative;
+    transition:transform .25s ease, box-shadow .25s ease;
+    opacity:0;
+    animation:rise .6s ease forwards;
+  }
+  .pin:hover{
+    transform:rotate(0deg) scale(1.025) !important;
+    box-shadow:0 16px 30px -12px rgba(74,44,58,0.4), 0 4px 10px rgba(74,44,58,0.1);
+    z-index:2;
+  }
+  .pin::before{
+    content:"";
+    position:absolute;
+    top:-7px; left:50%;
+    width:13px; height:13px;
+    margin-left:-6.5px;
+    background:radial-gradient(circle at 30% 30%, #e3c08a, var(--gold));
+    border-radius:50%;
+    box-shadow:0 3px 4px rgba(0,0,0,0.25);
+  }
+
+  .tilt-1{ transform:rotate(-2.2deg); }
+  .tilt-2{ transform:rotate(1.6deg); }
+  .tilt-3{ transform:rotate(-1deg); }
+  .tilt-4{ transform:rotate(2deg); }
+
+  .pin:nth-child(1){ animation-delay:.05s; }
+  .pin:nth-child(2){ animation-delay:.15s; }
+  .pin:nth-child(3){ animation-delay:.25s; }
+  .pin:nth-child(4){ animation-delay:.35s; }
+  .pin:nth-child(5){ animation-delay:.45s; }
+  .pin:nth-child(6){ animation-delay:.55s; }
+  .pin:nth-child(7){ animation-delay:.65s; }
+  .pin:nth-child(8){ animation-delay:.75s; }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(18px) rotate(0deg); }
+    to{ opacity:1; }
+  }
+
+  /* photo pins */
+  .photo-frame{
+    position:relative;
+    overflow:hidden;
+    border-radius:2px;
+    background:#eee;
+    aspect-ratio:4/5;
+  }
+  .photo-frame img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .photo-frame.broken img{ display:none; }
+  .photo-fallback{
+    display:none;
+    position:absolute; inset:0;
+    align-items:center; justify-content:center;
+    flex-direction:column;
+    gap:6px;
+    background:linear-gradient(135deg, #f1e3da, #e9d3cf);
+    font-family:'Poppins', sans-serif;
+    font-size:12px;
+    color:#9c7d72;
+    text-align:center;
+    padding:10px;
+  }
+  .photo-fallback span{ font-size:26px; }
+  .photo-frame.broken .photo-fallback{ display:flex; }
+
+  .tape{
+    position:absolute;
+    top:-10px; left:50%;
+    width:70px; height:24px;
+    margin-left:-35px;
+    background:repeating-linear-gradient(45deg, rgba(255,255,255,0.55) 0 6px, rgba(255,255,255,0.3) 6px 12px), var(--sage);
+    opacity:0.85;
+    transform:rotate(-3deg);
+    box-shadow:0 2px 4px rgba(0,0,0,0.15);
+    z-index:1;
+  }
+
+  .pin .caption{
+    font-family:'Caveat', cursive;
+    font-size:21px;
+    margin:12px 2px 0;
+    color:var(--plum);
+  }
+
+  /* note pins */
+  .note-pin .label{
+    font-family:'Poppins', sans-serif;
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--rose);
+    margin:0 0 8px;
+  }
+  .note-pin p{
+    margin:0;
+    font-size:15px;
+    line-height:1.55;
+  }
+  .note-pin.quote p{
+    font-style:italic;
+    font-family:'Caveat', cursive;
+    font-size:24px;
+    line-height:1.3;
+  }
+
+  .stat-pin{
+    text-align:center;
+    background:linear-gradient(160deg, #fff, #fbeee9);
+  }
+  .stat-pin .num{
+    font-family:'Caveat', cursive;
+    font-size:46px;
+    font-weight:700;
+    color:var(--rose);
+    display:block;
+    line-height:1;
+  }
+  .stat-pin .num-label{
+    font-family:'Poppins', sans-serif;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:#8a6a76;
+  }
+
+  /* letter CTA pin — spans full width, sits at the end like a final note pinned to the board */
+  .cta-pin{
+    column-span:all;
+    max-width:380px;
+    margin:10px auto 0;
+    text-align:center;
+    background:linear-gradient(160deg, #fffaf6, #fbeee2);
+    padding:30px 26px 28px;
+    cursor:pointer;
+  }
+  .cta-pin .seal{
+    width:46px; height:46px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #e08a8a, #b34b4b);
+    box-shadow:0 4px 8px rgba(0,0,0,0.25), inset 0 -3px 6px rgba(0,0,0,0.2);
+    display:flex; align-items:center; justify-content:center;
+    color:#fce9e9; font-size:20px;
+  }
+  .cta-pin h3{
+    font-family:'Caveat', cursive;
+    font-size:30px;
+    margin:0 0 6px;
+  }
+  .cta-pin p{
+    font-size:13px;
+    color:#7a5a68;
+    margin:0 0 18px;
+  }
+  .read-btn{
+    font-family:'Poppins', sans-serif;
+    font-size:13px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:var(--plum);
+    color:#fdf6f1;
+    border:none;
+    padding:13px 26px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .read-btn:hover{
+    background:var(--rose);
+    transform:translateY(-2px);
+  }
+
+  /* ================= LETTER SCREEN ================= */
+
+  .letter-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 18px;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(216,140,154,0.12), transparent 50%),
+      var(--linen);
+  }
+  .letter-paper{
+    max-width:560px;
+    width:100%;
+    background:var(--card);
+    border-radius:4px;
+    box-shadow:0 25px 50px -15px rgba(74,44,58,0.4);
+    padding:52px 48px 44px;
+    position:relative;
+    animation:unfold .55s ease;
+  }
+  @keyframes unfold{
+    from{ opacity:0; transform:translateY(24px) scale(0.98); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  .letter-paper::before{
+    content:"";
+    position:absolute;
+    top:0; left:40px; right:40px;
+    height:1px;
+    background:linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .letter-date{
+    font-family:'Poppins', sans-serif;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--rose);
+    margin:0 0 28px;
+    text-align:right;
+  }
+  .letter-greeting{
+    font-family:'Caveat', cursive;
+    font-size:34px;
+    margin:0 0 18px;
+  }
+  .letter-body p{
+    font-size:16px;
+    line-height:1.85;
+    margin:0 0 16px;
+    color:#3f2733;
+  }
+  .letter-sign{
+    margin-top:26px;
+    font-family:'Caveat', cursive;
+    font-size:30px;
+    text-align:right;
+  }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:34px;
+    font-family:'Poppins', sans-serif;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--sage);
+    text-decoration:none;
+    cursor:pointer;
+    background:none;
+    border:none;
+    padding:0;
+  }
+  .back-link:hover{ color:var(--rose); }
+
+</style>
+</head>
+<body>
+
+  <!-- ========================= BOARD SCREEN ========================= -->
+  <section id="board" class="screen active">
+
+    <header class="board-header">
+      <p class="eyebrow">a little board of us</p>
+      <!-- EDIT: change the date range below -->
+      <h1>Three Months With You ♡</h1>
+      <p class="sub">March 25 — June 25, 2026</p>
+    </header>
+
+    <div class="board-grid">
+
+      <!-- photo pin 1 -->
+      <div class="pin photo-pin tilt-1">
+        <div class="tape"></div>
+        <div class="photo-frame">
+          <img src="photo1.jpg" alt="Photo 1" onerror="this.parentElement.classList.add('broken')">
+          <div class="photo-fallback"><span>📷</span>photo1.jpg</div>
+        </div>
+        <p class="caption">the day it started</p>
+      </div>
+
+      <!-- note pin -->
+      <div class="pin note-pin tilt-2">
+        <p class="label">Milestone</p>
+        <p>92 days. Zero arguments that didn't end in laughing.</p>
+      </div>
+
+      <!-- photo pin 2 -->
+      <div class="pin photo-pin tilt-3">
+        <div class="tape"></div>
+        <div class="photo-frame">
+          <img src="photo2.jpg" alt="Photo 2" onerror="this.parentElement.classList.add('broken')">
+          <div class="photo-fallback"><span>📷</span>photo2.jpg</div>
+        </div>
+        <p class="caption">my favorite kind of ordinary</p>
+      </div>
+
+      <!-- stat pin -->
+      <div class="pin stat-pin tilt-2">
+        <span class="num">3</span>
+        <span class="num-label">months of us</span>
+      </div>
+
+      <!-- quote note -->
+      <div class="pin note-pin quote tilt-1">
+        <p>"you're my favorite text notification."</p>
+      </div>
+
+      <!-- photo pin 3 -->
+      <div class="pin photo-pin tilt-4">
+        <div class="tape"></div>
+        <div class="photo-frame">
+          <img src="photo3.jpg" alt="Photo 3" onerror="this.parentElement.classList.add('broken')">
+          <div class="photo-fallback"><span>📷</span>photo3.jpg</div>
+        </div>
+        <p class="caption">us, being us</p>
+      </div>
+
+      <!-- note pin -->
+      <div class="pin note-pin tilt-3">
+        <p class="label">Inside joke</p>
+        <p>still not over the thing you said on our first date. you know the one.</p>
+      </div>
+
+      <!-- letter CTA -->
+      <div class="pin cta-pin" onclick="showLetter()">
+        <div class="seal">✉</div>
+        <h3>one more thing...</h3>
+        <p>i wrote you something.</p>
+        <button class="read-btn" onclick="event.stopPropagation(); showLetter()">Read My Letter</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================= LETTER SCREEN ========================= -->
+  <section id="letter" class="screen">
+    <div class="letter-screen">
+      <div class="letter-paper">
+        <p class="letter-date">June 25, 2026</p>
+        <!-- EDIT: greeting -->
+        <p class="letter-greeting">My Love,</p>
+
+        <!-- ===== EDIT YOUR LETTER TEXT BELOW — replace these paragraphs with your own words ===== -->
+        <div class="letter-body">
+          <p>Three months. It sounds small when I say it out loud, but it doesn't feel small at all. It feels like a hundred small mornings, a hundred small "good night, love you"s, and somehow it already feels like I can't remember what it was like before you were the first person I wanted to tell things to.</p>
+          <p>I made you that little board because I wanted you to see, all in one place, how much I've been paying attention. Every photo, every silly note, it's all just me trying to say one big thing in a lot of small ways: I'm really glad it's you.</p>
+          <p>Here's to the next three months, and the three after that, and however many it takes.</p>
+        </div>
+        <!-- ===== END LETTER TEXT ===== -->
+
+        <!-- EDIT: sign-off -->
+        <p class="letter-sign">— Yours, always</p>
+
+        <button class="back-link" onclick="showBoard()">← back to our board</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function showLetter(){
+      document.getElementById('board').classList.remove('active');
+      document.getElementById('letter').classList.add('active');
+      window.scrollTo(0,0);
+    }
+    function showBoard(){
+      document.getElementById('letter').classList.remove('active');
+      document.getElementById('board').classList.add('active');
+      window.scrollTo(0,0);
+    }
+  </script>
+
+</body>
+</html>
