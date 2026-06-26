@@ -148,6 +148,83 @@
   .photo-fallback span{ font-size:26px; }
   .photo-frame.broken .photo-fallback{ display:flex; }
 
+  /* flip card for photo backstories */
+  .flip-card{
+    cursor:pointer;
+    perspective:1200px;
+  }
+  .flip-inner{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/5;
+    transition:transform .6s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+  }
+  .flip-card.flipped .flip-inner{ transform:rotateY(180deg); }
+  .flip-front, .flip-back{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .flip-front .photo-frame{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    aspect-ratio:unset;
+  }
+  .flip-back{
+    transform:rotateY(180deg);
+    background:linear-gradient(160deg, #fbeee2, #f1ded3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    text-align:center;
+  }
+  .flip-back p{
+    font-family:'Caveat', cursive;
+    font-size:21px;
+    line-height:1.35;
+    color:var(--plum);
+    margin:0;
+  }
+  .flip-hint{
+    font-family:'Poppins', sans-serif;
+    font-size:9px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:#b08a95;
+    text-align:center;
+    margin:6px 0 0;
+    opacity:0.85;
+  }
+
+  /* things I love about you pin */
+  .love-pin .love-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    text-align:left;
+  }
+  .love-pin .love-list li{
+    font-size:14.5px;
+    line-height:1.7;
+    padding-left:22px;
+    position:relative;
+    margin-bottom:5px;
+  }
+  .love-pin .love-list li::before{
+    content:"♡";
+    position:absolute;
+    left:0;
+    top:0;
+    color:var(--rose);
+    font-size:13px;
+  }
+
   .tape{
     position:absolute;
     top:-10px; left:50%;
@@ -208,6 +285,44 @@
     color:#8a6a76;
   }
 
+  /* countdown pin */
+  .countdown-pin{
+    text-align:center;
+    background:linear-gradient(160deg, #fff, #f3eee6);
+  }
+  .countdown-grid{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin:8px 0 6px;
+  }
+  .countdown-grid div{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:34px;
+  }
+  .countdown-grid span{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:32px;
+    color:var(--rose);
+    line-height:1;
+  }
+  .countdown-grid small{
+    font-family:'Poppins', sans-serif;
+    font-size:9px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:#8a6a76;
+  }
+  .countdown-caption{
+    font-family:'Caveat', cursive;
+    font-size:19px;
+    margin:6px 0 0;
+    color:var(--plum);
+  }
+
   /* letter CTA pin — spans full width, sits at the end like a final note pinned to the board */
   .cta-pin{
     column-span:all;
@@ -253,6 +368,55 @@
   .read-btn:hover{
     background:var(--rose);
     transform:translateY(-2px);
+  }
+
+  /* timeline button pin — reuses cta-pin look but its own card */
+  .timeline-pin{
+    text-align:center;
+    background:linear-gradient(160deg, #fffaf6, #f3ead9);
+    cursor:pointer;
+    padding:26px 20px 24px;
+  }
+  .timeline-pin .seal{
+    width:42px; height:42px;
+    margin:0 auto 12px;
+    border-radius:50%;
+    box-shadow:0 4px 8px rgba(0,0,0,0.2), inset 0 -3px 6px rgba(0,0,0,0.18);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px;
+  }
+  .timeline-pin h3{
+    font-family:'Caveat', cursive;
+    font-size:26px;
+    margin:0 0 5px;
+  }
+  .timeline-pin p{
+    font-size:13px;
+    color:#7a5a68;
+    margin:0 0 14px;
+  }
+
+  /* honeymoon dream pin */
+  .dream-pin{
+    text-align:center;
+    background:linear-gradient(160deg, #fdf3e7, #f6dfd3);
+  }
+  .dream-sky{
+    font-size:26px;
+    margin:6px 0 10px;
+    letter-spacing:6px;
+  }
+  .dream-pin h4{
+    font-family:'Caveat', cursive;
+    font-size:26px;
+    margin:0 0 6px;
+    color:var(--plum);
+  }
+  .dream-pin p{
+    font-size:14px;
+    line-height:1.55;
+    color:#6e524f;
+    margin:0;
   }
 
   /* ================= LETTER SCREEN ================= */
@@ -332,6 +496,64 @@
   }
   .back-link:hover{ color:var(--rose); }
 
+  /* timeline list */
+  .tl-list{
+    margin:6px 0 8px;
+    border-left:2px solid var(--gold);
+    padding-left:22px;
+  }
+  .tl-item{
+    position:relative;
+    margin-bottom:20px;
+  }
+  .tl-item::before{
+    content:"";
+    position:absolute;
+    left:-28px; top:4px;
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--rose);
+    box-shadow:0 0 0 3px var(--card);
+  }
+  .tl-date{
+    display:block;
+    font-family:'Poppins', sans-serif;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--rose);
+    margin-bottom:4px;
+  }
+  .tl-item p{
+    margin:0;
+    font-size:16px;
+    line-height:1.5;
+    color:#3f2733;
+  }
+
+  /* background music toggle */
+  .music-toggle{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    z-index:50;
+    font-family:'Poppins', sans-serif;
+    font-size:12px;
+    letter-spacing:.5px;
+    background:var(--plum);
+    color:#fdf6f1;
+    border:none;
+    padding:11px 18px;
+    border-radius:30px;
+    cursor:pointer;
+    box-shadow:0 8px 18px -6px rgba(74,44,58,0.5);
+    transition:transform .2s ease, background .2s ease;
+  }
+  .music-toggle:hover{
+    background:var(--rose);
+    transform:translateY(-2px);
+  }
+
 </style>
 </head>
 <body>
@@ -348,14 +570,24 @@
 
     <div class="board-grid">
 
-      <!-- photo pin 1 -->
+      <!-- photo pin 1 — click/tap the photo to flip and see the backstory -->
       <div class="pin photo-pin tilt-1">
         <div class="tape"></div>
-        <div class="photo-frame">
-          <img src="photo1.jpg" alt="Photo 1" onerror="this.parentElement.classList.add('broken')">
-          <div class="photo-fallback"><span>📷</span>photo1.jpg</div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="photo-frame">
+                <img src="photo1.jpg" alt="Photo 1" onerror="this.parentElement.classList.add('broken')">
+                <div class="photo-fallback"><span>📷</span>photo1.jpg</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <p>This was the first time we kissed in front of our group.</p>
+            </div>
+          </div>
         </div>
         <p class="caption">the day it started</p>
+        <p class="flip-hint">tap for the story</p>
       </div>
 
       <!-- note pin -->
@@ -364,14 +596,24 @@
         <p>92 days. Zero arguments that didn't end in laughing.</p>
       </div>
 
-      <!-- photo pin 2 -->
+      <!-- photo pin 2 — click/tap the photo to flip and see the backstory -->
       <div class="pin photo-pin tilt-3">
         <div class="tape"></div>
-        <div class="photo-frame">
-          <img src="photo2.jpg" alt="Photo 2" onerror="this.parentElement.classList.add('broken')">
-          <div class="photo-fallback"><span>📷</span>photo2.jpg</div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="photo-frame">
+                <img src="photo2.jpg" alt="Photo 2" onerror="this.parentElement.classList.add('broken')">
+                <div class="photo-fallback"><span>📷</span>photo2.jpg</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <p>I felt so good in your lap, it's the best.</p>
+            </div>
+          </div>
         </div>
         <p class="caption">my favorite kind of ordinary</p>
+        <p class="flip-hint">tap for the story</p>
       </div>
 
       <!-- stat pin -->
@@ -380,25 +622,77 @@
         <span class="num-label">months of us</span>
       </div>
 
+      <!-- countdown pin — EDIT: change the date in the script below to your actual meet-up date -->
+      <div class="pin countdown-pin tilt-1">
+        <p class="label">Countdown</p>
+        <div class="countdown-grid">
+          <div><span id="cd-days">28</span><small>days</small></div>
+          <div><span id="cd-hours">00</span><small>hrs</small></div>
+          <div><span id="cd-mins">00</span><small>min</small></div>
+          <div><span id="cd-secs">00</span><small>sec</small></div>
+        </div>
+        <p class="countdown-caption">until we meet again</p>
+      </div>
+
       <!-- quote note -->
       <div class="pin note-pin quote tilt-1">
         <p>"you're my favorite text notification."</p>
       </div>
 
-      <!-- photo pin 3 -->
+      <!-- photo pin 3 — click/tap the photo to flip and see the backstory -->
       <div class="pin photo-pin tilt-4">
         <div class="tape"></div>
-        <div class="photo-frame">
-          <img src="photo3.jpg" alt="Photo 3" onerror="this.parentElement.classList.add('broken')">
-          <div class="photo-fallback"><span>📷</span>photo3.jpg</div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="photo-frame">
+                <img src="photo3.jpg" alt="Photo 3" onerror="this.parentElement.classList.add('broken')">
+                <div class="photo-fallback"><span>📷</span>photo3.jpg</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <p>Aashi, you were so excited to make me see Cleo and all.</p>
+            </div>
+          </div>
         </div>
         <p class="caption">us, being us</p>
+        <p class="flip-hint">tap for the story</p>
       </div>
 
       <!-- note pin -->
       <div class="pin note-pin tilt-3">
         <p class="label">Inside joke</p>
         <p>still not over the thing you said on our first date. you know the one.</p>
+      </div>
+
+      <!-- things I love about you pin -->
+      <div class="pin love-pin tilt-2">
+        <p class="label">Things I Love About You</p>
+        <ul class="love-list">
+          <li>Your smile is the best</li>
+          <li>You're so caring and sweet</li>
+          <li>You're the most perfect for me</li>
+          <li>The way you get excited over the smallest things</li>
+          <li>How safe and at home I feel with you</li>
+        </ul>
+      </div>
+
+      <!-- timeline button pin -->
+      <div class="pin timeline-pin tilt-1" onclick="showTimeline()">
+        <div class="seal" style="background:radial-gradient(circle at 35% 30%, #c9a66b, #9c7d3f);">🕰</div>
+        <h3>our story so far</h3>
+        <p>every little moment, in order.</p>
+        <button class="read-btn" onclick="event.stopPropagation(); showTimeline()">See Our Timeline</button>
+      </div>
+
+      <!-- honeymoon dream pin -->
+      <div class="pin dream-pin tilt-3">
+        <p class="label">Our Someday</p>
+        <div class="dream-sky">
+          <span>🎈</span><span>🎈</span><span>🎈</span>
+        </div>
+        <h4>Cappadocia, Turkey</h4>
+        <p>hot air balloons at sunrise — that's where you want our honeymoon, and I already can't wait.</p>
       </div>
 
       <!-- letter CTA -->
@@ -436,7 +730,66 @@
     </div>
   </section>
 
+  <!-- ========================= TIMELINE SCREEN ========================= -->
+  <section id="timeline" class="screen">
+    <div class="letter-screen">
+      <div class="letter-paper timeline-paper">
+        <p class="letter-date">Our Story</p>
+        <p class="letter-greeting">Everything, In Order</p>
+
+        <!-- EDIT: add, remove, or re-date any of these timeline entries -->
+        <div class="tl-list">
+          <div class="tl-item">
+            <span class="tl-date">Feb 20</span>
+            <p>Our first kiss — at the pizzeria.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Mar 27</span>
+            <p>Our first date — Pilani Shopping.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Best moment</span>
+            <p>The makeout behind the post office.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Best moment</span>
+            <p>Dancing in the rain.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Best moment</span>
+            <p>Dancing under the moonlight.</p>
+          </div>
+        </div>
+
+        <button class="back-link" onclick="showBoard()">← back to our board</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- background song — add your own audio file named song.mp3 in the same folder. -->
+  <!-- (copyrighted music can't be auto-included, so drop in your own legally-obtained mp3, e.g. exported from a CD/your own recording, or any royalty-free file you rename to song.mp3) -->
+  <audio id="bg-song" src="song.mp3" loop preload="none"></audio>
+  <button id="music-toggle" class="music-toggle" onclick="toggleMusic()">🎵 Play Our Song</button>
+
   <script>
+    // EDIT: set this to the exact date (and time, if you want) you're meeting again
+    const meetDate = new Date('2026-07-23T00:00:00');
+
+    function updateCountdown(){
+      const diff = Math.max(0, meetDate - new Date());
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const mins = Math.floor((diff / (1000*60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+      const pad = n => String(n).padStart(2,'0');
+      document.getElementById('cd-days').textContent = days;
+      document.getElementById('cd-hours').textContent = pad(hours);
+      document.getElementById('cd-mins').textContent = pad(mins);
+      document.getElementById('cd-secs').textContent = pad(secs);
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
     function showLetter(){
       document.getElementById('board').classList.remove('active');
       document.getElementById('letter').classList.add('active');
@@ -444,8 +797,25 @@
     }
     function showBoard(){
       document.getElementById('letter').classList.remove('active');
+      document.getElementById('timeline').classList.remove('active');
       document.getElementById('board').classList.add('active');
       window.scrollTo(0,0);
+    }
+    function showTimeline(){
+      document.getElementById('board').classList.remove('active');
+      document.getElementById('timeline').classList.add('active');
+      window.scrollTo(0,0);
+    }
+    function toggleMusic(){
+      const audio = document.getElementById('bg-song');
+      const btn = document.getElementById('music-toggle');
+      if(audio.paused){
+        audio.play().catch(()=>{ alert("Add a song.mp3 file in the same folder for this to work!"); });
+        btn.textContent = '🔊 Pause Our Song';
+      } else {
+        audio.pause();
+        btn.textContent = '🎵 Play Our Song';
+      }
     }
   </script>
 
