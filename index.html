@@ -554,23 +554,137 @@
     transform:translateY(-2px);
   }
 
+  /* ================= FLOATING HEARTS (subtle bg) ================= */
+  .floating-hearts{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:-1;
+  }
+  .floating-hearts .fh{
+    position:absolute;
+    bottom:-10%;
+    color:var(--rose);
+    opacity:0;
+    animation:float-up linear infinite;
+    will-change:transform, opacity;
+  }
+  
+  /* Increased opacity so hearts are visible */
+  @keyframes float-up{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    8%{ opacity:0.60; }
+    85%{ opacity:0.50; }
+    100%{ transform:translateY(-115vh) translateX(var(--drift,20px)) rotate(12deg); opacity:0; }
+  }
+
+  /* ================= SECRET BUTTON + MESSAGE ================= */
+  .secret-btn{
+    position:fixed;
+    bottom:18px;
+    left:18px;
+    z-index:50;
+    width:32px; height:32px;
+    border-radius:50%;
+    border:none;
+    background:rgba(74,44,58,0.10);
+    color:var(--rose);
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+    opacity:0.4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:opacity .25s ease, transform .25s ease, background .25s ease;
+  }
+  .secret-btn:hover{
+    opacity:1;
+    transform:scale(1.12);
+    background:rgba(74,44,58,0.18);
+  }
+
+  .secret-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(74,44,58,0.55);
+    backdrop-filter:blur(2px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:200;
+    padding:24px;
+  }
+  .secret-overlay.show{ display:flex; }
+  .secret-card{
+    background:var(--card);
+    border-radius:6px;
+    max-width:380px;
+    width:100%;
+    padding:40px 32px 30px;
+    text-align:center;
+    box-shadow:0 25px 50px -15px rgba(74,44,58,0.5);
+    animation:unfold .4s ease;
+    position:relative;
+  }
+  .secret-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:36px; right:36px;
+    height:1px;
+    background:linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .secret-icon{ font-size:24px; margin-bottom:10px; }
+  .secret-msg{
+    font-family:'Caveat', cursive;
+    font-size:27px;
+    line-height:1.4;
+    color:var(--plum);
+    margin:0 0 22px;
+  }
+
 </style>
 </head>
 <body>
 
-  <!-- ========================= BOARD SCREEN ========================= -->
+  <div class="floating-hearts" aria-hidden="true">
+    <span class="fh" style="left:4%; font-size:22px; animation-duration:22s; animation-delay:0s; --drift:24px;">♡</span>
+    <span class="fh" style="left:12%; font-size:16px; animation-duration:26s; animation-delay:2s; --drift:-15px;">♡</span>
+    <span class="fh" style="left:18%; font-size:24px; animation-duration:20s; animation-delay:5s; --drift:20px;">♡</span>
+    <span class="fh" style="left:27%; font-size:18px; animation-duration:19s; animation-delay:9s; --drift:14px;">♡</span>
+    <span class="fh" style="left:35%; font-size:26px; animation-duration:24s; animation-delay:3s; --drift:-25px;">♡</span>
+    <span class="fh" style="left:41%; font-size:16px; animation-duration:25s; animation-delay:2s; --drift:-22px;">♡</span>
+    <span class="fh" style="left:50%; font-size:28px; animation-duration:18s; animation-delay:7s; --drift:10px;">♡</span>
+    <span class="fh" style="left:56%; font-size:16px; animation-duration:28s; animation-delay:12s; --drift:20px;">♡</span>
+    <span class="fh" style="left:63%; font-size:20px; animation-duration:22s; animation-delay:1s; --drift:-18px;">♡</span>
+    <span class="fh" style="left:69%; font-size:14px; animation-duration:21s; animation-delay:6s; --drift:-14px;">♡</span>
+    <span class="fh" style="left:76%; font-size:26px; animation-duration:25s; animation-delay:10s; --drift:30px;">♡</span>
+    <span class="fh" style="left:81%; font-size:17px; animation-duration:26s; animation-delay:15s; --drift:18px;">♡</span>
+    <span class="fh" style="left:88%; font-size:22px; animation-duration:19s; animation-delay:4s; --drift:-12px;">♡</span>
+    <span class="fh" style="left:95%; font-size:18px; animation-duration:23s; animation-delay:8s; --drift:-20px;">♡</span>
+  </div>
+
+  <button id="secret-btn" class="secret-btn" onclick="openSecret()" aria-label="shh, a secret" title="shh...">🤍</button>
+
+  <div class="secret-overlay" id="secret-overlay" onclick="closeSecret()">
+    <div class="secret-card" onclick="event.stopPropagation()">
+      <div class="secret-icon">🤍</div>
+      <p class="secret-msg">Kavya Reddiwala will love you forever, and always bring you brocodes.</p>
+      <button class="back-link" onclick="closeSecret()">close</button>
+    </div>
+  </div>
+
   <section id="board" class="screen active">
 
     <header class="board-header">
       <p class="eyebrow">a little board of us</p>
-      <!-- EDIT: change the date range below -->
       <h1>Three Months With You ♡</h1>
       <p class="sub">March 25 — June 25, 2026</p>
     </header>
 
     <div class="board-grid">
 
-      <!-- photo pin 1 — click/tap the photo to flip and see the backstory -->
       <div class="pin photo-pin tilt-1">
         <div class="tape"></div>
         <div class="flip-card" onclick="this.classList.toggle('flipped')">
@@ -590,13 +704,11 @@
         <p class="flip-hint">tap for the story</p>
       </div>
 
-      <!-- note pin -->
       <div class="pin note-pin tilt-2">
         <p class="label">Milestone</p>
         <p>92 days. Zero arguments that didn't end in laughing.</p>
       </div>
 
-      <!-- photo pin 2 — click/tap the photo to flip and see the backstory -->
       <div class="pin photo-pin tilt-3">
         <div class="tape"></div>
         <div class="flip-card" onclick="this.classList.toggle('flipped')">
@@ -616,13 +728,11 @@
         <p class="flip-hint">tap for the story</p>
       </div>
 
-      <!-- stat pin -->
       <div class="pin stat-pin tilt-2">
         <span class="num">3</span>
         <span class="num-label">months of us</span>
       </div>
 
-      <!-- countdown pin — EDIT: change the date in the script below to your actual meet-up date -->
       <div class="pin countdown-pin tilt-1">
         <p class="label">Countdown</p>
         <div class="countdown-grid">
@@ -634,12 +744,10 @@
         <p class="countdown-caption">until we meet again</p>
       </div>
 
-      <!-- quote note -->
       <div class="pin note-pin quote tilt-1">
         <p>"you're my favorite text notification."</p>
       </div>
 
-      <!-- photo pin 3 — click/tap the photo to flip and see the backstory -->
       <div class="pin photo-pin tilt-4">
         <div class="tape"></div>
         <div class="flip-card" onclick="this.classList.toggle('flipped')">
@@ -659,13 +767,11 @@
         <p class="flip-hint">tap for the story</p>
       </div>
 
-      <!-- note pin -->
       <div class="pin note-pin tilt-3">
         <p class="label">Inside joke</p>
         <p>still not over the thing you said on our first date. you know the one.</p>
       </div>
 
-      <!-- things I love about you pin -->
       <div class="pin love-pin tilt-2">
         <p class="label">Things I Love About You</p>
         <ul class="love-list">
@@ -677,7 +783,6 @@
         </ul>
       </div>
 
-      <!-- timeline button pin -->
       <div class="pin timeline-pin tilt-1" onclick="showTimeline()">
         <div class="seal" style="background:radial-gradient(circle at 35% 30%, #c9a66b, #9c7d3f);">🕰</div>
         <h3>our story so far</h3>
@@ -685,7 +790,6 @@
         <button class="read-btn" onclick="event.stopPropagation(); showTimeline()">See Our Timeline</button>
       </div>
 
-      <!-- honeymoon dream pin -->
       <div class="pin dream-pin tilt-3">
         <p class="label">Our Someday</p>
         <div class="dream-sky">
@@ -695,7 +799,13 @@
         <p>hot air balloons at sunrise — that's where you want our honeymoon, and I already can't wait.</p>
       </div>
 
-      <!-- letter CTA -->
+      <div class="pin timeline-pin tilt-4" onclick="showBucketList()">
+        <div class="seal" style="background:radial-gradient(circle at 35% 30%, #b9c9ad, #7e9171);">📜</div>
+        <h3>our future bucket list</h3>
+        <p>everything we still get to do, together.</p>
+        <button class="read-btn" onclick="event.stopPropagation(); showBucketList()">See Our List</button>
+      </div>
+
       <div class="pin cta-pin" onclick="showLetter()">
         <div class="seal">✉</div>
         <h3>one more thing...</h3>
@@ -706,23 +816,17 @@
     </div>
   </section>
 
-  <!-- ========================= LETTER SCREEN ========================= -->
   <section id="letter" class="screen">
     <div class="letter-screen">
       <div class="letter-paper">
         <p class="letter-date">June 25, 2026</p>
-        <!-- EDIT: greeting -->
         <p class="letter-greeting">My Love,</p>
 
-        <!-- ===== EDIT YOUR LETTER TEXT BELOW — replace these paragraphs with your own words ===== -->
         <div class="letter-body">
           <p>Three months. It sounds small when I say it out loud, but it doesn't feel small at all. It feels like a hundred small mornings, a hundred small "good night, love you"s, and somehow it already feels like I can't remember what it was like before you were the first person I wanted to tell things to.</p>
           <p>I made you that little board because I wanted you to see, all in one place, how much I've been paying attention. Every photo, every silly note, it's all just me trying to say one big thing in a lot of small ways: I'm really glad it's you.</p>
           <p>Here's to the next three months, and the three after that, and however many it takes.</p>
         </div>
-        <!-- ===== END LETTER TEXT ===== -->
-
-        <!-- EDIT: sign-off -->
         <p class="letter-sign">— Yours, always</p>
 
         <button class="back-link" onclick="showBoard()">← back to our board</button>
@@ -730,14 +834,12 @@
     </div>
   </section>
 
-  <!-- ========================= TIMELINE SCREEN ========================= -->
   <section id="timeline" class="screen">
     <div class="letter-screen">
       <div class="letter-paper timeline-paper">
         <p class="letter-date">Our Story</p>
         <p class="letter-greeting">Everything, In Order</p>
 
-        <!-- EDIT: add, remove, or re-date any of these timeline entries -->
         <div class="tl-list">
           <div class="tl-item">
             <span class="tl-date">Feb 20</span>
@@ -766,8 +868,48 @@
     </div>
   </section>
 
-  <!-- background song — add your own audio file named song.mp3 in the same folder. -->
-  <!-- (copyrighted music can't be auto-included, so drop in your own legally-obtained mp3, e.g. exported from a CD/your own recording, or any royalty-free file you rename to song.mp3) -->
+  <section id="bucketlist" class="screen">
+    <div class="letter-screen">
+      <div class="letter-paper timeline-paper">
+        <p class="letter-date">Our Someday List</p>
+        <p class="letter-greeting">Future Bucket List</p>
+
+        <div class="tl-list">
+          <div class="tl-item">
+            <span class="tl-date">Kitchen Chaos</span>
+            <p>🍰 Cook and bake something together — extra flour, zero regrets.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Someday Soon</span>
+            <p>🏡 Actually live together. No goodbyes at the door, just us, every day.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Brave & Terrified</span>
+            <p>🪂 Try an extreme sport together — screaming and holding hands the whole way down.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Cozy</span>
+            <p>🎬 One movie, one blanket, as close as two people can possibly get.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Spa Night</span>
+            <p>🧖 Our favorite face masks, looking ridiculous and loving every second.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">Skin to Skin</span>
+            <p>🌙 Falling asleep with absolutely nothing between us.</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-date">For Our Eyes Only</span>
+            <p>😏 Some very creative roleplay. mhmhmm, you already know.</p>
+          </div>
+        </div>
+
+        <button class="back-link" onclick="showBoard()">← back to our board</button>
+      </div>
+    </div>
+  </section>
+
   <audio id="bg-song" src="song.mp3" loop preload="none"></audio>
   <button id="music-toggle" class="music-toggle" onclick="toggleMusic()">🎵 Play Our Song</button>
 
@@ -798,6 +940,7 @@
     function showBoard(){
       document.getElementById('letter').classList.remove('active');
       document.getElementById('timeline').classList.remove('active');
+      document.getElementById('bucketlist').classList.remove('active');
       document.getElementById('board').classList.add('active');
       window.scrollTo(0,0);
     }
@@ -805,6 +948,17 @@
       document.getElementById('board').classList.remove('active');
       document.getElementById('timeline').classList.add('active');
       window.scrollTo(0,0);
+    }
+    function showBucketList(){
+      document.getElementById('board').classList.remove('active');
+      document.getElementById('bucketlist').classList.add('active');
+      window.scrollTo(0,0);
+    }
+    function openSecret(){
+      document.getElementById('secret-overlay').classList.add('show');
+    }
+    function closeSecret(){
+      document.getElementById('secret-overlay').classList.remove('show');
     }
     function toggleMusic(){
       const audio = document.getElementById('bg-song');
