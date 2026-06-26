@@ -33,6 +33,85 @@
   .screen{ display:none; }
   .screen.active{ display:block; }
 
+  /* ================= PASSCODE LOCK SCREEN ================= */
+  #lock-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--linen);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lock-container {
+    background: var(--card);
+    padding: 45px 35px;
+    border-radius: 8px;
+    box-shadow: 0 20px 45px rgba(74,44,58,0.18), 0 4px 12px rgba(74,44,58,0.05);
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    animation: unfold .5s ease;
+    position: relative;
+  }
+  .lock-container::before {
+    content:"";
+    position:absolute;
+    top:0; left:35px; right:35px;
+    height:1px;
+    background:linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .lock-heart {
+    font-size: 38px;
+    margin-bottom: 12px;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .lock-container h2 {
+    font-family: 'Caveat', cursive;
+    font-size: 38px;
+    margin: 0 0 10px;
+    color: var(--plum);
+  }
+  .lock-hint {
+    font-family: 'Lora', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: #7a5a68;
+    margin: 0 0 24px;
+    line-height: 1.4;
+  }
+  #passcode-input {
+    width: 160px;
+    text-align: center;
+    font-size: 26px;
+    letter-spacing: 6px;
+    padding: 12px;
+    border: 2px solid var(--sage);
+    border-radius: 30px;
+    background: var(--linen);
+    color: var(--plum);
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    transition: border-color 0.25s;
+  }
+  #passcode-input:focus {
+    border-color: var(--rose);
+  }
+  .lock-error {
+    font-family: 'Caveat', cursive;
+    font-size: 21px;
+    color: #b71c1c;
+    margin-top: 18px;
+    min-height: 26px;
+    font-weight: 700;
+  }
+
   /* ================= BOARD SCREEN ================= */
 
   .board-header{
@@ -323,7 +402,7 @@
     color:var(--plum);
   }
 
-  /* letter CTA pin — spans full width, sits at the end like a final note pinned to the board */
+  /* letter CTA pin */
   .cta-pin{
     column-span:all;
     max-width:380px;
@@ -370,7 +449,7 @@
     transform:translateY(-2px);
   }
 
-  /* timeline button pin — reuses cta-pin look but its own card */
+  /* timeline button pin */
   .timeline-pin{
     text-align:center;
     background:linear-gradient(160deg, #fffaf6, #f3ead9);
@@ -419,8 +498,7 @@
     margin:0;
   }
 
-  /* ================= LETTER SCREEN ================= */
-
+  /* ================= INTERACTIVE SCREENS COVER LAYOUT ================= */
   .letter-screen{
     min-height:100vh;
     display:flex;
@@ -531,6 +609,64 @@
     color:#3f2733;
   }
 
+  /* ================= QUIZ STYLES ================= */
+  .quiz-q {
+    margin-bottom: 35px;
+  }
+  .quiz-q h4 {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    margin: 0 0 14px;
+    color: var(--plum);
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .quiz-opt {
+    background: var(--linen);
+    border: 2px solid transparent;
+    padding: 14px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    text-align: left;
+    transition: all .2s;
+    color: var(--plum);
+  }
+  .quiz-opt:hover {
+    background: #f0e2d3;
+    transform: translateX(4px);
+  }
+  .quiz-opt.correct {
+    background: #e6f4ea;
+    border-color: #a8d0b6;
+    color: #1b5e20;
+    pointer-events: none;
+  }
+  .quiz-opt.wrong {
+    background: #fce8e6;
+    border-color: #f2aba4;
+    color: #b71c1c;
+    pointer-events: none;
+  }
+  .quiz-opt:disabled {
+    pointer-events: none;
+  }
+  .quiz-opt:disabled:not(.correct):not(.wrong) {
+    opacity: 0.6;
+  }
+  .quiz-feedback {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    min-height: 28px;
+    color: var(--rose);
+    margin-top: 10px;
+    font-weight: 700;
+  }
+
   /* background music toggle */
   .music-toggle{
     position:fixed;
@@ -570,12 +706,10 @@
     animation:float-up linear infinite;
     will-change:transform, opacity;
   }
-  
-  /* Increased opacity so hearts are visible */
   @keyframes float-up{
     0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
-    8%{ opacity:0.60; }
-    85%{ opacity:0.50; }
+    8%{ opacity:0.22; }
+    85%{ opacity:0.18; }
     100%{ transform:translateY(-115vh) translateX(var(--drift,20px)) rotate(12deg); opacity:0; }
   }
 
@@ -648,21 +782,25 @@
 </head>
 <body>
 
+  <section id="lock-screen" class="screen active">
+    <div class="lock-container">
+      <div class="lock-heart">🔒❤️</div>
+      <h2>For Your Eyes Only</h2>
+      <p class="lock-hint">Enter the day it all beautifully began to unlock our space... (DDMM)</p>
+      <input type="password" id="passcode-input" maxlength="4" placeholder="••••" inputmode="numeric" oninput="validatePasscode()">
+      <div id="lock-error" class="lock-error"></div>
+    </div>
+  </section>
+
   <div class="floating-hearts" aria-hidden="true">
-    <span class="fh" style="left:4%; font-size:22px; animation-duration:22s; animation-delay:0s; --drift:24px;">♡</span>
-    <span class="fh" style="left:12%; font-size:16px; animation-duration:26s; animation-delay:2s; --drift:-15px;">♡</span>
-    <span class="fh" style="left:18%; font-size:24px; animation-duration:20s; animation-delay:5s; --drift:20px;">♡</span>
+    <span class="fh" style="left:4%; font-size:15px; animation-duration:22s; animation-delay:0s; --drift:24px;">♡</span>
+    <span class="fh" style="left:15%; font-size:12px; animation-duration:27s; animation-delay:4s; --drift:-18px;">♡</span>
     <span class="fh" style="left:27%; font-size:18px; animation-duration:19s; animation-delay:9s; --drift:14px;">♡</span>
-    <span class="fh" style="left:35%; font-size:26px; animation-duration:24s; animation-delay:3s; --drift:-25px;">♡</span>
-    <span class="fh" style="left:41%; font-size:16px; animation-duration:25s; animation-delay:2s; --drift:-22px;">♡</span>
-    <span class="fh" style="left:50%; font-size:28px; animation-duration:18s; animation-delay:7s; --drift:10px;">♡</span>
+    <span class="fh" style="left:41%; font-size:13px; animation-duration:25s; animation-delay:2s; --drift:-22px;">♡</span>
     <span class="fh" style="left:56%; font-size:16px; animation-duration:28s; animation-delay:12s; --drift:20px;">♡</span>
-    <span class="fh" style="left:63%; font-size:20px; animation-duration:22s; animation-delay:1s; --drift:-18px;">♡</span>
-    <span class="fh" style="left:69%; font-size:14px; animation-duration:21s; animation-delay:6s; --drift:-14px;">♡</span>
-    <span class="fh" style="left:76%; font-size:26px; animation-duration:25s; animation-delay:10s; --drift:30px;">♡</span>
+    <span class="fh" style="left:69%; font-size:11px; animation-duration:21s; animation-delay:6s; --drift:-14px;">♡</span>
     <span class="fh" style="left:81%; font-size:17px; animation-duration:26s; animation-delay:15s; --drift:18px;">♡</span>
-    <span class="fh" style="left:88%; font-size:22px; animation-duration:19s; animation-delay:4s; --drift:-12px;">♡</span>
-    <span class="fh" style="left:95%; font-size:18px; animation-duration:23s; animation-delay:8s; --drift:-20px;">♡</span>
+    <span class="fh" style="left:91%; font-size:13px; animation-duration:23s; animation-delay:8s; --drift:-20px;">♡</span>
   </div>
 
   <button id="secret-btn" class="secret-btn" onclick="openSecret()" aria-label="shh, a secret" title="shh...">🤍</button>
@@ -675,12 +813,12 @@
     </div>
   </div>
 
-  <section id="board" class="screen active">
+  <section id="board" class="screen">
 
     <header class="board-header">
       <p class="eyebrow">a little board of us</p>
       <h1>Three Months With You ♡</h1>
-      <p class="sub">March 25 — June 25, 2026</p>
+      <p class="sub">March 27 — June 27, 2026</p>
     </header>
 
     <div class="board-grid">
@@ -806,6 +944,13 @@
         <button class="read-btn" onclick="event.stopPropagation(); showBucketList()">See Our List</button>
       </div>
 
+      <div class="pin timeline-pin tilt-2" onclick="showQuiz()">
+        <div class="seal" style="background:radial-gradient(circle at 35% 30%, #d88c9a, #b35f70);">🧠</div>
+        <h3>memory quiz</h3>
+        <p>let's see how well you remember...</p>
+        <button class="read-btn" onclick="event.stopPropagation(); showQuiz()">Take the Quiz</button>
+      </div>
+
       <div class="pin cta-pin" onclick="showLetter()">
         <div class="seal">✉</div>
         <h3>one more thing...</h3>
@@ -816,10 +961,53 @@
     </div>
   </section>
 
+  <section id="quiz" class="screen">
+    <div class="letter-screen">
+      <div class="letter-paper">
+        <p class="letter-date">Pop Quiz</p>
+        <p class="letter-greeting">How well do you remember?</p>
+
+        <div class="letter-body">
+          <div class="quiz-q" id="q1">
+            <h4>1. Where did we share our very first kiss?</h4>
+            <div class="quiz-options">
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q1', false)">With the dogs 🐕</button>
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q1', false)">In front of Narang 😳</button>
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q1', true)">At the pizzeria 🍕</button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <h4>2. What is undeniably our greatest makeout spot?</h4>
+            <div class="quiz-options">
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q2', false)">Behind the post office 📮</button>
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q2', true)">The old workshop 🛠️</button>
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q2', false)">Cleo 🐾</button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <h4>3. What was I wearing on our first date?</h4>
+            <div class="quiz-options">
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q3', false)">A black top 🖤</button>
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q3', true)">A blue top 💙</button>
+              <button class="quiz-opt" onclick="checkQuiz(this, 'q3', false)">A red top ❤️</button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+        </div>
+
+        <button class="back-link" onclick="showBoard()">← back to our board</button>
+      </div>
+    </div>
+  </section>
+
   <section id="letter" class="screen">
     <div class="letter-screen">
       <div class="letter-paper">
-        <p class="letter-date">June 25, 2026</p>
+        <p class="letter-date">June 27, 2026</p>
         <p class="letter-greeting">My Love,</p>
 
         <div class="letter-body">
@@ -827,8 +1015,8 @@
           <p>I made you that little board because I wanted you to see, all in one place, how much I've been paying attention. Every photo, every silly note, it's all just me trying to say one big thing in a lot of small ways: I'm really glad it's you.</p>
           <p>Here's to the next three months, and the three after that, and however many it takes.</p>
         </div>
-        <p class="letter-sign">— Yours, always</p>
 
+        <p class="letter-sign">— Yours, always</p>
         <button class="back-link" onclick="showBoard()">← back to our board</button>
       </div>
     </div>
@@ -914,7 +1102,6 @@
   <button id="music-toggle" class="music-toggle" onclick="toggleMusic()">🎵 Play Our Song</button>
 
   <script>
-    // EDIT: set this to the exact date (and time, if you want) you're meeting again
     const meetDate = new Date('2026-07-23T00:00:00');
 
     function updateCountdown(){
@@ -932,28 +1119,84 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    function showLetter(){
-      document.getElementById('board').classList.remove('active');
-      document.getElementById('letter').classList.add('active');
-      window.scrollTo(0,0);
+    /* Passcode Lock Logic */
+    function validatePasscode() {
+      const input = document.getElementById('passcode-input');
+      const error = document.getElementById('lock-error');
+      
+      if (input.value === '2703') {
+        const lockScreen = document.getElementById('lock-screen');
+        lockScreen.style.opacity = '0';
+        lockScreen.style.transition = 'opacity 0.5s ease-out';
+        
+        setTimeout(() => {
+          lockScreen.classList.remove('active');
+          showBoard();
+        }, 500);
+      } else if (input.value.length === 4) {
+        error.textContent = "That's not the day we started, my love... Try again! 🤭";
+        input.value = '';
+        setTimeout(() => { error.textContent = ''; }, 3500);
+      }
     }
-    function showBoard(){
+
+    function hideAllScreens() {
+      document.getElementById('board').classList.remove('active');
       document.getElementById('letter').classList.remove('active');
       document.getElementById('timeline').classList.remove('active');
       document.getElementById('bucketlist').classList.remove('active');
+      document.getElementById('quiz').classList.remove('active');
+    }
+
+    function showBoard(){
+      hideAllScreens();
       document.getElementById('board').classList.add('active');
       window.scrollTo(0,0);
     }
+    function showLetter(){
+      hideAllScreens();
+      document.getElementById('letter').classList.add('active');
+      window.scrollTo(0,0);
+    }
     function showTimeline(){
-      document.getElementById('board').classList.remove('active');
+      hideAllScreens();
       document.getElementById('timeline').classList.add('active');
       window.scrollTo(0,0);
     }
     function showBucketList(){
-      document.getElementById('board').classList.remove('active');
+      hideAllScreens();
       document.getElementById('bucketlist').classList.add('active');
       window.scrollTo(0,0);
     }
+    function showQuiz(){
+      hideAllScreens();
+      document.getElementById('quiz').classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    /* Quiz Evaluation */
+    function checkQuiz(btn, qId, isCorrect) {
+      const container = document.getElementById(qId);
+      const buttons = container.querySelectorAll('.quiz-opt');
+      const feedback = container.querySelector('.quiz-feedback');
+
+      buttons.forEach(b => b.disabled = true);
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        feedback.textContent = "Exactly right! 🥰";
+      } else {
+        btn.classList.add('wrong');
+        feedback.textContent = "Oops! Nope. 🤭";
+        
+        buttons.forEach(b => {
+          if (b.getAttribute('onclick').includes('true')) {
+            b.classList.add('correct');
+          }
+        });
+      }
+    }
+
     function openSecret(){
       document.getElementById('secret-overlay').classList.add('show');
     }
